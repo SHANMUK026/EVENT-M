@@ -1,8 +1,7 @@
-import { Component, NgZone } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -19,16 +18,16 @@ export class LoginComponent {
   signupPassword = '';
   isSignup = false;
 
-  constructor(private auth: AuthService, private router: Router, private zone: NgZone) {}
+  constructor(private auth: AuthService) {}
 
-  onLogin(): void {
-    const success = this.auth.login(this.loginEmail, this.loginPassword);
-    if (success) {
-      this.zone.run(() => this.router.navigate(['/dashboard']));
-    } else {
-      alert('Invalid credentials');
-    }
+ onLogin(): void {
+  const success = this.auth.login(this.loginEmail, this.loginPassword);
+  if (success) {
+    window.location.replace('/dashboard');
+  } else {
+    alert('Invalid credentials');
   }
+}
 
   onSignup(): void {
     const success = this.auth.signup(this.signupUsername, this.signupEmail, this.signupPassword);

@@ -11,6 +11,16 @@ interface User {
 })
 export class AuthService {
   private storageKey = 'users';
+  private tokenKey = 'token';
+
+  constructor() {
+    if (typeof window !== 'undefined') {
+      // Clear token on reload
+      window.addEventListener('load', () => {
+        localStorage.removeItem(this.tokenKey);
+      });
+    }
+  }
 
   private get users(): User[] {
     if (typeof window === 'undefined') return [];
@@ -27,7 +37,7 @@ export class AuthService {
   login(email: string, password: string): boolean {
     const user = this.users.find(u => u.email === email && u.password === password);
     if (user && typeof window !== 'undefined') {
-      localStorage.setItem('token', 'fake-jwt-token');
+      localStorage.setItem(this.tokenKey, 'valid');
       return true;
     }
     return false;
@@ -42,12 +52,12 @@ export class AuthService {
 
   logout(): void {
     if (typeof window !== 'undefined') {
-      localStorage.removeItem('token');
+      localStorage.removeItem(this.tokenKey);
     }
   }
 
   isAuthenticated(): boolean {
     if (typeof window === 'undefined') return false;
-    return !!localStorage.getItem('token');
+    return localStorage.getItem(this.tokenKey) === 'valid';
   }
 }
