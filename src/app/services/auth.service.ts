@@ -34,14 +34,16 @@ export class AuthService {
     }
   }
 
-  login(email: string, password: string): boolean {
-    const user = this.users.find(u => u.email === email && u.password === password);
-    if (user && typeof window !== 'undefined') {
-      localStorage.setItem(this.tokenKey, 'valid');
-      return true;
-    }
-    return false;
+login(email: string, password: string): boolean {
+  const user = this.users.find(u => u.email === email && u.password === password);
+  if (user && typeof window !== 'undefined') {
+    localStorage.setItem('token', 'fake-jwt-token');
+    localStorage.setItem('currentUserEmail', user.email);
+    return true;
   }
+  return false;
+}
+
 
   signup(username: string, email: string, password: string): boolean {
     const exists = this.users.some(u => u.email === email);

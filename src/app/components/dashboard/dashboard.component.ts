@@ -9,12 +9,14 @@ import { AuthService } from '../../services/auth.service';
   imports: []
 })
 export class DashboardComponent {
- constructor(private auth: AuthService) {
-  if (typeof window !== 'undefined' && !this.auth.isAuthenticated()) {
-    window.location.replace('/login');
-  }
-}
+  userEmail: string | null = '';
 
+  constructor(private auth: AuthService) {
+    if (typeof window !== 'undefined' && !this.auth.isAuthenticated()) {
+      window.location.replace('/login');
+    }
+    this.userEmail = localStorage.getItem('currentUserEmail');
+  }
 
   logout(): void {
     this.auth.logout();
